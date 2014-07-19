@@ -1,0 +1,12 @@
+
+body, div, canvas { /* lets make every element fit there space */
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+

@@ -68,6 +68,7 @@ Crafty.c('PlayerCar', {
   yAngle: 0,
   xAngle: 0,
   carSpeed: 4,
+  carColor: null,
   startDeviceOrientationListener: function() {
     var _this = this; // we need this because deviceOrientationListener has its own this (context)
 
@@ -82,10 +83,15 @@ Crafty.c('PlayerCar', {
       console.log("Sorry, your browser doesn't support Device Orientation");
     }
   },
+  setCarColor: function() {
+    // pseudo random rgb color code with date object
+    this.carColor = '#' + new Date().getUTCMilliseconds() + new Date().getUTCMilliseconds();
+  },
   init: function() {
     this.startDeviceOrientationListener();
+    this.setCarColor();
     this.addComponent("2D, Canvas, Color, Multiway, Collision")
-      .color('deepskyblue')
+      .color(this.carColor)
       .attr({
         w: 15,
         h: 15,
@@ -101,16 +107,18 @@ Crafty.c('PlayerCar', {
 
       // move car
       // x-axis
-      if(this.xAngle > 10) {
-        this.x = this._x - this.carSpeed; } // left
-      else if(this.xAngle < -10) {
+      if (this.xAngle > 10) {
+        this.x = this._x - this.carSpeed;
+      } // left
+      else if (this.xAngle < -10) {
         this.x = this._x + this.carSpeed; // right
       }
       // y-axis
-      if(this.yAngle > 10) {
-        this.y = this._y + this.carSpeed; } // down
-      else if(this.yAngle < -10) {
-       this.y = this._y - this.carSpeed; // up
+      if (this.yAngle > 10) {
+        this.y = this._y + this.carSpeed;
+      } // down
+      else if (this.yAngle < -10) {
+        this.y = this._y - this.carSpeed; // up
       }
       // coinsEnt.text(this.xAngle + ' ' + this.yAngle); // you can use coins entity as debug output or create a new Text entity for debug purpose.
 
@@ -129,36 +137,37 @@ Crafty.c('PlayerCar', {
         socket.emit('msg', {
           action: 'move',
           _x: this._x,
-          _y: this._y
+          _y: this._y,
+          color: this.carColor
         });
       })
-    .onHit("Grass", function() {
-      this.carSpeed = 1;
-    }, function() {
-      // when hit ends
-      this.carSpeed = 2;
-    })
-    .onHit("Coin", function(targets)  {
-      // onHit return array but we can hit only one coin at one time so lets pick up the first object of the targets array
-      var coin = _.first(targets).obj;
+      .onHit("Grass", function() {
+        this.carSpeed = 1;
+      }, function() {
+        // when hit ends
+        this.carSpeed = 2;
+      })
+      .onHit("Coin", function(targets)  {
+        // onHit return array but we can hit only one coin at one time so lets pick up the first object of the targets array
+        var coin = _.first(targets).obj;
 
-      // create new coin after random timeout (max 6 second)
-      setTimeout(function() {
-        var newCoin = Crafty.e('Coin')
-          .attr({
-            x: coin.coinArea._x + Math.floor((Math.random() * coin.coinArea._w) + 1),
-            y: coin.coinArea._y + Math.floor((Math.random() * coin.coinArea._h) + 1)
-          });
-        newCoin.coinArea = coin.coinArea;
-      }, Math.floor((Math.random() * 6000) + 1));
+        // create new coin after random timeout (max 6 second)
+        setTimeout(function() {
+          var newCoin = Crafty.e('Coin')
+            .attr({
+              x: coin.coinArea._x + Math.floor((Math.random() * coin.coinArea._w) + 1),
+              y: coin.coinArea._y + Math.floor((Math.random() * coin.coinArea._h) + 1)
+            });
+          newCoin.coinArea = coin.coinArea;
+        }, Math.floor((Math.random() * 6000) + 1));
 
-      // destroy coin
-      coin.destroy();
+        // destroy coin
+        coin.destroy();
 
-      // add coin for players counter
-      coins += 1;
-      coinsEnt.text('Coins: ' + coins);
-    })
+        // add coin for players counter
+        coins += 1;
+        coinsEnt.text('Coins: ' + coins);
+      })
       .onHit("Bomb", function(targets)  {
         // onHit return array but we can hit only one bomb at one time so lets pick up the first object of the targets array
         var bomb = _.first(targets).obj;
@@ -320,8 +329,6 @@ Crafty.scene("Game", function() {
 
 }); // Game scene
 
-var isiPad = navigator.userAgent.match(/iPad/i) !== null;
-
 Crafty.init(1024, 748).canvas.init();
 
 Crafty.background("#dedede");
@@ -345,7 +352,7 @@ socket.on('msg', function(client, data) {
         ent: Crafty.e('ClientCar').attr({
           x: data._x,
           y: data._y
-        })
+        }).color(data.color) // set car color too at the first time
       });
     }
   }

@@ -12,13 +12,28 @@
 </head>
 
 <body>
+  <!--
+    TASKS:
+      - Create your own track
+        - In crafty-scene.js modify grass variables
+      - Design good colors for the game
+        - In crafty-scene.js modify colors
+        - Try to think good colors also to the cars (an array where to pick one when someone connects to the game)
+      - Resize elements in the game
+        - In crafty-components.js modify w & h values for the following
+          - Coin
+          - ClientCar
+          - PlayerCar
+      - RACE
+  -->
   <div id="cr-stage"></div>
+  <!-- Needed for socket connection -->
   <script src="https://cdn.socket.io/socket.io-1.0.6.js"></script>
+  <!-- Helper files -->
   <script src="js/libs/jquery.js"></script>
   <script src="js/libs/lodash.js"></script>
   <script src="js/libs/crafty.js"></script>
-
-
+  <!-- Game files -->
   <script src="js/crafty-components.js"></script>
   <script src="js/crafty-scene.js"></script>
   <script src="js/crafty-socket.js"></script>

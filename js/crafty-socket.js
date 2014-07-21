@@ -1,8 +1,15 @@
+/**
+ * Sockets IP adress to make the game work on multiple devices at the same time
+ */
 // var socket = io('http://amc.pori.tut.fi:8081');
-var socket = io('http://192.168.43.84:8081');
+var socket = io('http://192.168.1.14:8081');
 
+/**
+ * When clients get broadcasted messages
+ * if type is MOVE the car position is updated
+ * if type is COINS the coin is drawn again (someone has collected it)
+ */
 socket.on('msg', function(client, data) {
-  //console.log(client + ' send data: ' + JSON.stringify(data)); // generate too much traffic when really moving objects
   if (data.action === 'move') {
     car = _.find(clients, function(obj) {
       return obj.client === client;
@@ -41,6 +48,10 @@ socket.on('msg', function(client, data) {
   }
 });
 
+/**
+ * When client disconnects it will be removed from client list
+ * Car must also remove to avoid ghost cars in the game
+ */
 socket.on('disconnected', function(client) {
   console.log(client + ' disconnected');
   // remove client from clients array when client disconnect

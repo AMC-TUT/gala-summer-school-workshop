@@ -1,5 +1,7 @@
 
-
+/**
+ * Public variables for the game
+ */
 var coinCount = 0,
   coinsEnt = null, // variables for coins text entity for updating the coin count.
   clients = [], // socket clients, except self
@@ -29,39 +31,6 @@ Crafty.background("#dedede");
 
 Crafty.scene("Game");
 
-// var Screen = { w: 1024, h: 748 };
-
-// Crafty.init();
-// Crafty.canvas.init();
-
-// var scaler = function() {
-//   var current = { w: Crafty.viewport.width,
-//                   h: Crafty.viewport.height };
-
-//   // This will reset the scale when it adjusts the canvas element
-//   // dimensions, so do it right before setting the scale we want.
-//   Crafty.viewport.reload();
-
-//   if ( current.w > current.h ) {
-//     // Landscape, scale to fit height
-//     Crafty.viewport.scale( current.h / Screen.h );
-//   } else {
-//     // Portrait, scale to fit width
-//     Crafty.viewport.scale( current.w / Screen.w );
-//   }
-// };
-
-// // Avoid drawing entities before we're ready to scale.
-// Crafty.removeEvent( Crafty, window, 'resize', Crafty.viewport.reload );
-
-// // Adjust scale to fit inside resized window.
-// Crafty.addEvent( Crafty, window, 'resize', scaler );
-
-// // Run the scaler after scene changes, since they reset the scale.
-// Crafty.bind( 'SceneChange', scaler );
-
-// Crafty.scene("Game");
-
 /**
  * HELPER FUNCTIONS
  */
@@ -79,6 +48,9 @@ function createCoins() {
     coinEnt.push(coin);
   });
 
+  /**
+   * Tell the socket server where the coins are created
+   */
   socket.emit('msg', {
     action: 'coins',
     coins: coins
@@ -87,7 +59,10 @@ function createCoins() {
 }
 
 
-
+/**
+ * Get the amount of connected clients
+ * When the first player connects to the game coins will be created
+ */
 
 socket.emit('clientCount', function (data) {
   clientCount = data.clientCount;

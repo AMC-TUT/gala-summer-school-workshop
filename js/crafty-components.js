@@ -1,5 +1,7 @@
 // ----------
-
+/**
+ * Create COIN component
+ */
 Crafty.c('Coin', {
   coinArea: null,
   init: function() {
@@ -12,6 +14,9 @@ Crafty.c('Coin', {
   }
 });
 
+/**
+ * Create CAR (other players) component
+ */
 Crafty.c('ClientCar', {
   init: function() {
     this.addComponent("2D, Canvas, Color")
@@ -26,18 +31,9 @@ Crafty.c('ClientCar', {
   }
 });
 
-Crafty.c('Bomb', {
-  bombArea: null,
-  init: function() {
-    this.addComponent("2D, Canvas, Color")
-      .color('red')
-      .attr({
-        w: 15,
-        h: 15
-      });
-  }
-});
-
+/**
+ * Create GRASS component
+ */
 Crafty.c('Grass', {
   init: function() {
     this.addComponent("2D, Canvas");
@@ -45,13 +41,9 @@ Crafty.c('Grass', {
   }
 });
 
-Crafty.c('BombArea', {
-  init: function() {
-    this.addComponent("2D, Canvas");
-    //.color('pink'); // for debug use Color component
-  }
-});
-
+/**
+ * Create area where to put COIN component
+ */
 Crafty.c('CoinArea', {
   init: function() {
     this.addComponent("2D, Canvas");
@@ -59,6 +51,9 @@ Crafty.c('CoinArea', {
   }
 });
 
+/**
+ * Create PLAYER CAR component
+ */
 Crafty.c('PlayerCar', {
   yAngle: 0,
   xAngle: 0,
@@ -136,7 +131,7 @@ Crafty.c('PlayerCar', {
         this.carSpeed = 1;
       }, function() {
         // when hit ends
-        this.carSpeed = 2;
+        this.carSpeed = 4;
       })
       .onHit("Coin", function(targets)  {
         // onHit return array but we can hit only one coin at one time so lets pick up the first object of the targets array

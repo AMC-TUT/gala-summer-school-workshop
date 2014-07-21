@@ -159,7 +159,7 @@ Crafty.c('PlayerCar', {
         console.log(coin.coinArea);
 
         // destroy coin
-        coin.destroy();
+        coinEntToRemove.destroy();
 
         coins.push({ _x: newCoin._x, _y: newCoin._y, coinArea: newCoin.coinArea });
         coinEnt.push(newCoin);
@@ -170,33 +170,20 @@ Crafty.c('PlayerCar', {
         coinCount += 1;
         coinsEnt.text('Coins: ' + coinCount);
       })
-      .onHit("Bomb", function(targets)  {
-        // onHit return array but we can hit only one bomb at one time so lets pick up the first object of the targets array
-        var bomb = _.first(targets).obj;
-
-        // create new bomb after random timeout (max 12 second)
-        setTimeout(function() {
-          var newBomb = Crafty.e('Bomb')
-            .attr({
-              x: bomb.bombArea._x + Math.floor((Math.random() * bomb.bombArea._w) + 1),
-              y: bomb.bombArea._y + Math.floor((Math.random() * bomb.bombArea._h) + 1)
-            });
-          newBomb.bombArea = bomb.bombArea;
-        }, Math.floor((Math.random() * 12000) + 1));
-
-        // destroy bomb
-        bomb.destroy();
-
+      .onHit("ClientCar", function(targets)  {
         // destroy car
-        this.destroy();
+        if (this._x > 100) {
+          console.log('hit');
+          this.destroy();
 
-        // create new car for player after small timeout (2 seconds)
-        setTimeout(function() {
-          var newCar = Crafty.e('PlayerCar').attr({
-            x: 50,
-            y: 225
-          });
-        }, 2000);
+          // create new car for player after small timeout (2 seconds)
+          setTimeout(function() {
+            var newCar = Crafty.e('PlayerCar').attr({
+              x: 50,
+              y: 225
+            });
+          }, 2000);
+        }
       });
   }
 });

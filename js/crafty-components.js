@@ -106,8 +106,6 @@ Crafty.c('PlayerCar', {
 
       // restrictions for movement
       // x-axis
-      console.log(this.xAngle);
-      console.log(this.yAngle);
       if (this.xAngle > 10) {
         this.x = this._x - this.carSpeed;
       } // left

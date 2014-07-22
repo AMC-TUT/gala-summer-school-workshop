@@ -45,14 +45,14 @@ Crafty.scene("Game", function() {
     x: 296,
     y: 327,
     z: 2
-  }).color('#04B404');
+  }).color('red');
   var grass2 = Crafty.e('Grass, Color').attr({
     w: 216,
     h: 253,
     x: 523,
     y: 327,
     z: 2
-  }).color('#04B404');
+  }).color('blue');
   var grass3 = Crafty.e('Grass, Color').attr({
     w: 137,
     h: 416,

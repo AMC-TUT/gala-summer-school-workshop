@@ -59,22 +59,35 @@ Crafty.c('PlayerCar', {
   xAngle: 0,
   carSpeed: 2,
   carColor: null,
-  startDeviceOrientationListener: function() {
-    var _this = this; // we need this because deviceOrientationListener has its own this (context)
+  startLeapListener: function() {
+    var _this = this;
 
-    function deviceOrientationListener(event) {
-      _this.xAngle = Math.round(-1 * (window.orientation / 90) * event.beta);
-      _this.yAngle = Math.round(-1 * (window.orientation / 90) * event.gamma);
-    }
-
-    if (window.DeviceOrientationEvent) {
-      window.addEventListener("deviceorientation", deviceOrientationListener);
-    } else {
-      console.log("Sorry, your browser doesn't support Device Orientation");
+    if(_.isObject(Leap)) {
+      Leap.loop(function(frame) {
+        frame.hands.forEach(function(hand, index) {
+          _this.xAngle = -hand.palmPosition[0];
+          _this.yAngle = hand.palmPosition[2];
+        });
+      });
     }
   },
+  startDeviceOrientationListener: function() {
+    var _this = this; // we need this because deviceOrientationListener has its own this (context)
+    if(_.isUndefined(Leap)) {
+      function deviceOrientationListener(event) {
+        _this.xAngle = Math.round(-1 * (window.orientation / 90) * event.beta);
+        _this.yAngle = Math.round(-1 * (window.orientation / 90) * event.gamma);
+      }
 
+      if (window.DeviceOrientationEvent) {
+        window.addEventListener("deviceorientation", deviceOrientationListener);
+      } else {
+        console.log("Sorry, your browser doesn't support Device Orientation");
+      }
+    }
+  },
   init: function() {
+    this.startLeapListener();
     this.startDeviceOrientationListener();
     this.addComponent("2D, Canvas, Color, Multiway, Collision")
       .color(carColor)
@@ -93,6 +106,8 @@ Crafty.c('PlayerCar', {
 
       // restrictions for movement
       // x-axis
+      console.log(this.xAngle);
+      console.log(this.yAngle);
       if (this.xAngle > 10) {
         this.x = this._x - this.carSpeed;
       } // left

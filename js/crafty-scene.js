@@ -1,8 +1,10 @@
 Crafty.scene("Game", function() {
 
   // Crafty.background("url(img/track.png)");
+  //
+
   /**
-   * Create TRACK
+   * Create TRACK ent
    */
   var track = Crafty.e("2D, Canvas, Color").attr({
     x: 10,
@@ -13,7 +15,7 @@ Crafty.scene("Game", function() {
 
 
   /**
-   * Create COINS
+   * Create COINS ent
    */
   coinsEnt = Crafty.e("2D, Canvas, Text").attr({
     x: 30,
@@ -26,7 +28,7 @@ Crafty.scene("Game", function() {
   });
 
   /**
-   * Create CAR
+   * Create CAR ent
    */
   var car = Crafty.e('PlayerCar').attr({
     x: 50,
@@ -34,7 +36,7 @@ Crafty.scene("Game", function() {
   });
 
   /**
-   * Create GRASS
+   * Create GRASS ents
    * This is used to modify the track, create more grass variables to make your own tracks
    */
   var grass1 = Crafty.e('Grass, Color').attr({

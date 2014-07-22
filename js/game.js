@@ -27,7 +27,8 @@ var coinCount = 0,
  */
 Crafty.init(1024, 748).canvas.init();
 
-Crafty.background("#dedede");
+// background for the canvas
+//Crafty.background("#dedede");
 
 Crafty.scene("Game");
 
@@ -49,7 +50,8 @@ function createCoins() {
   });
 
   /**
-   * Tell the socket server where the coins are created
+   * Tell the socket server where the coins are created.
+   * Socket server keeps always current set of coins for the new player.
    */
   socket.emit('msg', {
     action: 'coins',
@@ -66,7 +68,7 @@ function createCoins() {
 
 socket.emit('clientCount', function (data) {
   clientCount = data.clientCount;
-  console.log('clientCount: ' + clientCount);
+  //console.log('clientCount: ' + clientCount);
   if (clientCount == 1) {
     createCoins();
   } else {
@@ -83,7 +85,7 @@ socket.emit('clientCount', function (data) {
             y: coin._y
           });
         ent.coinArea = coin.coinArea;
-        console.log(coin);
+        //console.log(coin);
         coinEnt.push(ent);
       });
     });

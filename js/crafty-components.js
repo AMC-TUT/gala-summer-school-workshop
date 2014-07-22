@@ -1,6 +1,6 @@
-// ----------
+
 /**
- * Create COIN component
+ * Coin component
  */
 Crafty.c('Coin', {
   coinArea: null,
@@ -15,7 +15,7 @@ Crafty.c('Coin', {
 });
 
 /**
- * Create CAR (other players) component
+ * ClientCar (other players) component
  */
 Crafty.c('ClientCar', {
   init: function() {
@@ -32,11 +32,11 @@ Crafty.c('ClientCar', {
 });
 
 /**
- * Create GRASS component
+ * Grass component
  */
 Crafty.c('Grass', {
   init: function() {
-    this.addComponent("2D, Canvas");
+    this.addComponent("2D, Canvas"); // Color
     //.color('orange'); // for debug use Color component
   }
 });
@@ -46,18 +46,18 @@ Crafty.c('Grass', {
  */
 Crafty.c('CoinArea', {
   init: function() {
-    this.addComponent("2D, Canvas");
+    this.addComponent("2D, Canvas"); // Color
     //.color('lime'); // for debug use Color component
   }
 });
 
 /**
- * Create PLAYER CAR component
+ * PlayerCar component
  */
 Crafty.c('PlayerCar', {
   yAngle: 0,
   xAngle: 0,
-  carSpeed: 4,
+  carSpeed: 2,
   carColor: null,
   startDeviceOrientationListener: function() {
     var _this = this; // we need this because deviceOrientationListener has its own this (context)
@@ -83,7 +83,7 @@ Crafty.c('PlayerCar', {
         h: 20,
         z: 99
       })
-      .multiway(3, {
+      .multiway(this.carSpeed, {
         UP_ARROW: -90,
         DOWN_ARROW: 90,
         RIGHT_ARROW: 0,
@@ -91,7 +91,7 @@ Crafty.c('PlayerCar', {
       }) // http://craftyjs.com/api/Multiway.html
     .bind("EnterFrame", function(frame) {
 
-      // move car
+      // restrictions for movement
       // x-axis
       if (this.xAngle > 10) {
         this.x = this._x - this.carSpeed;
@@ -106,7 +106,9 @@ Crafty.c('PlayerCar', {
       else if (this.yAngle < -10) {
         this.y = this._y - this.carSpeed; // up
       }
-      // coinsEnt.text(this.xAngle + ' ' + this.yAngle); // you can use coins entity as debug output or create a new Text entity for debug purpose.
+
+      // you can use coinsEnt entity as debug output or create a new Text entity for debug purpose.
+      // coinsEnt.text(this.xAngle + ' ' + this.yAngle);
 
       // boundaries min&max
       if (this._x < 11) {
@@ -131,7 +133,7 @@ Crafty.c('PlayerCar', {
         this.carSpeed = 1;
       }, function() {
         // when hit ends
-        this.carSpeed = 4;
+        this.carSpeed = 2;
       })
       .onHit("Coin", function(targets)  {
         // onHit return array but we can hit only one coin at one time so lets pick up the first object of the targets array
@@ -141,17 +143,14 @@ Crafty.c('PlayerCar', {
         var coinEntToRemove = _.find(coinEnt, function(obj) { return obj == coin; });
 
         coins = _.without(coins, coinToRemove);
-        console.log(coin.coinArea);
+
         // create new coin
-        console.log(coin.coinArea);
-        console.log(coinAreas);
         var newCoin = Crafty.e('Coin')
           .attr({
             x: coinAreas[coin.coinArea]._x + Math.floor((Math.random() * coinAreas[coin.coinArea]._w) + 1),
             y: coinAreas[coin.coinArea]._y + Math.floor((Math.random() * coinAreas[coin.coinArea]._h) + 1)
           });
         newCoin.coinArea = coin.coinArea;
-        console.log(coin.coinArea);
 
         // destroy coin
         coinEntToRemove.destroy();
@@ -168,7 +167,6 @@ Crafty.c('PlayerCar', {
       .onHit("ClientCar", function(targets)  {
         // destroy car
         if (this._x > 100) {
-          console.log('hit');
           this.destroy();
 
           // create new car for player after small timeout (2 seconds)

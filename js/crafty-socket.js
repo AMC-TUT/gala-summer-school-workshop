@@ -2,7 +2,7 @@
  * Sockets IP adress to make the game work on multiple devices at the same time
  */
 // var socket = io('http://amc.pori.tut.fi:8081');
-var socket = io('http://192.168.1.14:8081');
+var socket = io('http://amc.pori.tut.fi:8081');
 
 /**
  * When clients get broadcasted messages
